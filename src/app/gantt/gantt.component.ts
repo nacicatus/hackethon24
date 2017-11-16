@@ -31,7 +31,14 @@ export class GanttComponent implements OnInit {
 
     ngOnInit(){
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
-
+        gantt.config.columns = [
+            {name:"text",       label:"FDC",  width:"*", tree:true },
+            {name:"text",       label:"Team",  width:"*", tree:true },
+            {name:"text",       label:"Feature",  width:"*", tree:true },
+            {name:"start_date", label:"Start time", align: "center" },
+            {name:"duration",   label:"Duration",   align: "center" },
+            {name:"add",        label:"",           width:44 }
+        ];
         gantt.init(this.ganttContainer.nativeElement);
 
         gantt.attachEvent("onAfterTaskAdd", (id, item) => {
