@@ -1,11 +1,14 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {TaskService} from "../task.service";
 import {LinkService} from "../link.service";
+import {Task} from "../models/Task";
+import {Link} from "../models/Link";
 
-import "../../custom_modules/dhtmlx-gantt"
-import {} from "../../custom_modules/@types/dhtmlxgantt"
-//import "dhtmlx-gantt";
-//import {} from "@types/dhtmlxgantt";
+
+import "dhtmlx-gantt";
+import {} from "@types/dhtmlxgantt";
+
+declare let gantt: any;
 
 @Component({
     selector: "gantt",
@@ -26,15 +29,74 @@ export class GanttComponent implements OnInit {
 
     constructor(private taskService: TaskService, private linkService: LinkService){}
 
-
     ngOnInit(){
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
 
         gantt.init(this.ganttContainer.nativeElement);
+
+        gantt.attachEvent("onAfterTaskAdd", (id, item) => {
+            this.taskService.insert(this.serializeTask(item, true))
+                .then((response)=> {
+                    if (response.id != id) {
+                        gantt.changeTaskId(id, response.id);
+                    }
+                });
+        });
+
+        gantt.attachEvent("onAfterTaskUpdate", (id, item) => {
+            this.taskService.update(this.serializeTask(item));
+        });
+
+        gantt.attachEvent("onAfterTaskDelete", (id) => {
+            this.taskService.remove(id);
+        });
+
+        gantt.attachEvent("onAfterLinkAdd", (id, item) => {
+            this.linkService.insert(this.serializeLink(item, true))
+                .then((response) => {
+                    if(response.id != id){
+                        gantt.changeLinkId(id, response.id);
+                    }
+                });
+        });
+
+        gantt.attachEvent("onAfterLinkUpdate", (id, item) => {
+            this.linkService.update(this.serializeLink(item));
+        });
+
+        gantt.attachEvent("onAfterLinkDelete", (id) => {
+            this.linkService.remove(id);
+        });
 
         Promise.all([this.taskService.get(), this.linkService.get()])
             .then(([data, links]) => {
                 gantt.parse({data, links});
             });
     }
+
+    private serializeTask(data: any, insert: boolean = false): Task {
+        return this.serializeItem(data, insert) as Task;
+    }
+
+    private serializeLink(data: any, insert: boolean = false): Link {
+        return this.serializeItem(data, insert) as Link;
+    }
+
+    private serializeItem(data: any, insert: boolean): any{
+        var result = {};
+
+        for (let i in data) {
+            if (i.charAt(0) == "$" || i.charAt(0) == "_") continue;
+            if(insert && i == "id") continue;
+            if (data[i] instanceof Date) {
+                result[i] = gantt.templates.xml_format(data[i]);
+            }
+            else {
+                result[i] = data[i];
+            }
+        }
+
+        return result;
+    }
+
 }

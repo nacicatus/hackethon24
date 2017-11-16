@@ -1,42 +1,28 @@
-// import modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
+import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
+import {InMemoryDataService}  from './in-memory-data.service';
 
 //import components
 import { AppComponent } from './app.component';
 import { GanttComponent } from './gantt/gantt.component';
-import { PostsComponent } from './posts/posts.component';
-import { PostsService } from './posts.service';
 
-// Define the routes
-const ROUTES = [
-  {
-    path: '',
-    redirectTo: 'posts',
-    pathMatch: 'full'
-  },
-  {
-    path: 'posts',
-    component: PostsComponent
-  }
-];
 
 @NgModule({
   declarations: [
     AppComponent,
-    GanttComponent,
-    PostsComponent
+    GanttComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES) // Add routes to the app
+    InMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
-  providers: [PostsService], // Add the posts service  
+  providers: [], // Add the posts service
   bootstrap: [AppComponent]
 })
 export class AppModule { }
