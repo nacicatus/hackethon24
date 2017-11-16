@@ -26,11 +26,8 @@ const ROUTES = [
 @NgModule({
   declarations: [
     AppComponent,
-<<<<<<< HEAD
-    GanttComponent
-=======
+    GanttComponent,
     PostsComponent
->>>>>>> 17a2d66d9d91be65ddf63e574f4a8e3b7c450d80
   ],
   imports: [
     BrowserModule,
