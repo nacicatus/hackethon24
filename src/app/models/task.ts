@@ -4,5 +4,5 @@ export class Task {
   text: string;
   progress: number;
   duration: number;
-  parent: number;
+  //parent: number;
 }
