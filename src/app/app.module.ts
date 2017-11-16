@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { GanttComponent } from './gantt/gantt.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GanttComponent
   ],
   imports: [
     BrowserModule
