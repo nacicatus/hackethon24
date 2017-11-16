@@ -2,8 +2,10 @@ import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {TaskService} from "../task.service";
 import {LinkService} from "../link.service";
 
-import "dhtmlx-gantt";
-import {} from "@types/dhtmlxgantt";
+import "../../custom_modules/dhtmlx-gantt"
+import {} from "../../custom_modules/@types/dhtmlxgantt"
+//import "dhtmlx-gantt";
+//import {} from "@types/dhtmlxgantt";
 
 @Component({
     selector: "gantt",
