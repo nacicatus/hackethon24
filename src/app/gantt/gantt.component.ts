@@ -32,34 +32,34 @@ export class GanttComponent implements OnInit {
     ngOnInit(){
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
 
-      //  gantt.config.columns = [
-      //      {name:"text",       label:"FDC",  width:"*", tree:true },
-      //      {name:"text",       label:"Team",  width:"*", tree:true },
-      //      {name:"text",       label:"Feature",  width:"*", tree:true },
-      //      {name:"start_date", label:"Start time", align: "left" },
-      //      {name:"duration",   label:"Duration",   align: "left" },
-      //      {name:"add",        label:"",           width:44 }
-      //  ];
+        gantt.config.columns = [
+            {name:"text",       label:"FDC",  width:"*", tree:true },
+            {name:"text",       label:"Team",  width:"*", tree:true },
+            {name:"text",       label:"Feature",  width:"*", tree:true },
+            {name:"start_date", label:"Start time", align: "left" },
+            {name:"duration",   label:"Duration",   align: "left" },
+            {name:"add",        label:"",           width:44 }
+        ];
+
 
         gantt.init(this.ganttContainer.nativeElement);
 
         gantt.attachEvent("onAfterTaskAdd", function(id, item){
             this.taskService.insert(this.serializeTask(item))
-                .then((response)=> {
+              .then((response)=> {
                     if (response.id != id) {
                         gantt.changeTaskId(id, response.id);
                     }
                 });
         });
 
+
         gantt.attachEvent("onAfterTaskUpdate", function(id, item){
             this.taskService.update(this.serializeTask(item));
-            return true;
         });
 
         gantt.attachEvent("onAfterTaskDelete", function(id){
             this.taskService.remove(id);
-            return true;
         });
 
         gantt.attachEvent("onAfterLinkAdd", function(id, item){
@@ -69,17 +69,14 @@ export class GanttComponent implements OnInit {
                         gantt.changeLinkId(id, response.id);
                     }
                 });
-            return true;
         });
 
         gantt.attachEvent("onAfterLinkUpdate", function(id, item){
             this.linkService.update(this.serializeLink(item));
-            return true;
         });
 
         gantt.attachEvent("onAfterLinkDelete", function(id){
             this.linkService.remove(id);
-            return true;
         });
 
         Promise.all([this.taskService.get(), this.linkService.get()])
@@ -96,7 +93,7 @@ export class GanttComponent implements OnInit {
         return this.serializeItem(data, insert) as Link;
     }
 
-    private serializeItem(data: any, insert: boolean): any {
+    private serializeItem(data: any, insert: boolean = true): any {
         var result = [];
 
         for (let i in data) {
