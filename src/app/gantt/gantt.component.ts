@@ -93,8 +93,8 @@ export class GanttComponent implements OnInit {
         return this.serializeItem(data, insert) as Link;
     }
 
-    private serializeItem(data: any, insert: boolean = true): any {
-        var result = [];
+    private serializeItem(data: any, insert: boolean = false): any {
+        var result = {};
 
         for (let i in data) {
             if (i.charAt(0) == "$" || i.charAt(0) == "_") continue;
